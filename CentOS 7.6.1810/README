@@ -1,0 +1,9 @@
+# author: zhengsihan
+# date: 2019-01-06
+
+*_backup is original file from yum.
+* is modified file for python3 installed.
+
+Path:
+/usr/bin/yum
+/usr/libexec/urlgrabber-ext-down
