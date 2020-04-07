@@ -39,4 +39,27 @@ do
     fi
 
     # 尝试并行压缩3个文件
+    $Z < "$name" > $Zout &
+    $gz < "$name" > $gzout &
+    $bz < "$name" > $bzout &
+
+    wait # 直到所有的压缩操作全部完成。
+
+    #找出最佳的压缩结果
+    smallest="$(ls -l "$name" $Zout $gzout $bzout | awk '{print $5"="NR}' | sort -n | cut -d = -f2 | head -1)"
+
+    case "$smallest" in
+        1 ) echo "No space savings by compressing $name. Left as is."
+            ;;
+        2 ) echo Best compression is with compress. File renamed ${name}.Z
+            mv $Zout "${name}.Z" ; rm -f "$name"
+            ;;
+        3 ) echo Best compression is with gzip. File renamed ${name}.gz
+            mv $gzout "${name}.gz" ; rm -f "$name"
+            ;;
+        4 ) echo Best compression is with bzip2. File renamed ${name}.bz2
+            mv $bzout "${name}.bz2" ; rm -f "$name"
+    esac
 done
+
+exit 0
