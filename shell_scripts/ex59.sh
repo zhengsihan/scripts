@@ -48,4 +48,9 @@ if [ ! -z "$fail" ] ; then
     echo "Failed: no results found for $1"
     exit 1
 elif [ ! -z "$(grep '<h1 class="findHeader">Displaying' $tempout)" ] ; then
-    grep --color=never '/title/tt' $tempout | sed 's/</</g' | grep
+    grep --color=never '/title/tt' $tempout | sed 's/</</g' | grep -vE '(.png|.jpg|>[ ]*$)' \
+    | grep -A 1 "a href=" | grep -v '^--$' | sed 's/<a href="\/title\/tt//g;s/<\/a> //' \
+    | awk '(NR % 2 == 1) { title=$0 } (NR % 2 == 0) { print title " " $0 }' | sed 's/\/.*>: /' | sort
+fi
+
+exit 0
