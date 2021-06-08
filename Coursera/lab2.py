@@ -30,11 +30,7 @@ def read():
     
 def send(list):
     for dict in list:
-        # send data to endpoint
-        # p = json.dumps(dict)
         response = requests.post(url, json=dict)
-        forDEBUG("URL", url)
-        forDEBUG("RESP_CODE", response.status_code)
         if(response.status_code == 200):
             forDEBUG("SEND_SUCC", dict["title"])
         else:
